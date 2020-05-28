@@ -1,22 +1,30 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { arduinoRed, arduinoRedPerc, arduinoGreen, arduinoGreenPerc, arduinoBlue, arduinoBluePerc, getAccuracy } from './arduino.js';
+  import { getResults } from './fetch.js'
 
   export let redValue, greenValue, blueValue;
   export let redPercentage, greenPercentage, bluePercentage;
   export let buttonText;
 
+  const serverAddress = 'http://localhost:4000/results/';
+
   const dispatch = createEventDispatcher();
 
-  const roundScore = getAccuracy(redPercentage, arduinoRedPerc, greenPercentage, arduinoGreenPerc, bluePercentage, arduinoBluePerc);
+/* --------------------------Get the results---------------------------------*/
 
-  function newRound(){
+  let arduinoInfo = getResults(serverAddress, redPercentage, greenPercentage, bluePercentage);
+
+/* ------------------------Event handling------------------------------------*/
+
+  async function newRound(){
+    const results = await arduinoInfo;
+    const score = results.roundScore;
     dispatch('nextRound', {
-      score: roundScore,
+      score: score,
     });
   }
 
-  const resultParagraph = `You got within ${roundScore}% of the Arduino colour!`;
+/* --------------------------------------------------------------------------*/
 
 </script>
 
@@ -89,7 +97,7 @@
     left: 60%;
     transform: translate(-50%, -50%);
 	}
-  .arduinoResult {
+  .arduinoResults {
     position: absolute;
     top: 50%;
     left: 40%;
@@ -108,14 +116,16 @@
     transform: translate(-50%, -50%);
   }
 </style>
-
+{#await arduinoInfo}
+<p>loading...</p>
+{:then item}
 <h1> Results </h1>
 <h2 class="arduino"> Arduino Colour </h2>
-<div class="boxArduino" style="background-color: rgb({arduinoRed}, {arduinoGreen}, {arduinoBlue})"></div>
-<div class="arduinoResult">
-  <p>{arduinoRedPerc}% red</p>
-  <p>{arduinoGreenPerc}% green</p>
-  <p> {arduinoBluePerc}% blue</p>
+<div class="boxArduino" style="background-color: rgb({item.red}, {item.green}, {item.blue})"></div>
+<div class="arduinoResults">
+  <p>{item.redPerc}% red</p>
+  <p>{item.greenPerc}% green</p>
+  <p> {item.bluePerc}% blue</p>
 </div>
 <h2 class="user"> User Colour </h2>
 <div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"></div>
@@ -124,5 +134,8 @@
   <p>{greenPercentage}% green</p>
   <p> {bluePercentage}% blue</p>
 </div>
-<p class="results">{resultParagraph}</p>
+<p class="results">You got within {item.roundScore}% of the Arduino colour!</p>
 <button on:click={newRound}>{buttonText}</button>
+{:catch error}
+  <p style="color: red">{error.message}</p>
+{/await}

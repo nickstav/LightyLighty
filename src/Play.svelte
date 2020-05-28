@@ -1,25 +1,83 @@
 <script>
   import Preview from './Preview.svelte';
   import { createEventDispatcher } from 'svelte';
+  import { convertToPercentage } from './calculations.js';
 
   const dispatch = createEventDispatcher();
 
   export let round = 1;
   export let checkRound5;
-  let isGuessing = false;
 
+  let updateServer;
+
+  //variable to track whether to display Preview Mode or Play ('Guessing') Mode
+  let isGuessing = false;
+  //variable to define when to stop sending data to the server
+  let hasGuessed = false;
+
+/* ----------------------------User Colours----------------------------------*/
+
+  // define user values for the RGB colours and their corresponding %s
   let userRed = 0;
-  $: userRedPercentage = Math.round((userRed/255)*100);
+  $: userRedPercentage = convertToPercentage(userRed);
   let userGreen = 0;
-  $: userGreenPercentage = Math.round((userGreen/255)*100);
+  $: userGreenPercentage = convertToPercentage(userGreen);
   let userBlue = 0;
-  $: userBluePercentage = Math.round((userBlue/255)*100);
+  $: userBluePercentage = convertToPercentage(userBlue);
+
+  // the api parameters to send the relevant data to the server
+  $: colourParams = `${userRed}/${userGreen}/${userBlue}/${isGuessing}`;
+
+/* -------------------------send data to Server------------------------------*/
+
+  /* NOTE FOR MATT: I decided to leave this function here rather than move it to
+  fetch.js as I'd find the app easier to understand with this big ol' function
+  displayed in the Play.svelte component... not as neat but personally easier to
+  follow... so yeah... what be yer thoughts..? */
+
+  async function sendSliderValues() {
+    if (!hasGuessed) {
+      const serverAddress = 'http://localhost:4000/play/';
+      //set up the slider values (and current page of the app) as parameters
+      const sliderAddress = serverAddress + colourParams;
+      const response = await fetch(sliderAddress);
+      const connection = await response.json();
+      /* TODO - work out why Arduino isn't being recognised on reconnection.
+      Once down the following will check if server says the ardiuno has been
+      disconnected and prompt the user to continue or quit */
+      if (!connection) {
+        const reconnect = confirm('Please reconnect your Arduino');
+        if (reconnect) {
+          sendSliderValues();
+        } else {
+          dispatch('quit', {
+            isPlaying: false,
+          });
+        };
+      };
+    } else {
+      //once the guess is complete, stop the updateServer calling this function
+      clearInterval(updateServer);
+    };
+  }
+
+  // call the above function every 500ms
+  updateServer = setInterval(sendSliderValues, 500);
+
+/* ------------------------Event handling------------------------------------*/
 
   function switchToPreview() {
     isGuessing = false;
   }
 
+  // function to switch back to play mode when button pressed
+  function switchToPlay(event) {
+    isGuessing = event.detail.playMode;
+  }
+
+  // once submitted, all relevant data to be passed via event dispatcher
   function submitAttempt() {
+    hasGuessed = true;
     dispatch('submitted', {
       redVal: userRed,
       redPerc: userRedPercentage,
@@ -27,13 +85,11 @@
       greenPerc: userGreenPercentage,
       blueVal: userBlue,
       bluePerc: userBluePercentage,
-      hasGuessed: true,
+      hasGuessed,
     });
   }
 
-  function switchToPlay(event){
-		isGuessing = event.detail.playMode;
-	}
+/* --------------------------------------------------------------------------*/
 
 </script>
 
@@ -71,8 +127,8 @@
     transform: translate(-50%, -50%);
   }
   .slider {
-    webkit-appearance: none;  /* Override default CSS styles */
-    appearance: none;
+    -webkit-appearance: none;  /* Override default CSS styles */
+            appearance: none;
     width: 80%;
     height: 25px;
     position: absolute;
@@ -89,7 +145,7 @@
   /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
-    appearance: none;
+            appearance: none;
     width: 25px;
     height: 25px;
     cursor: pointer;
@@ -174,14 +230,6 @@
   button.submit {
     left: 60%;
   }
-  .box {
-		width: 50px;
-		height: 50px;
-		position: absolute;
-    top: 88%;
-    left: 90%;
-		border-radius: 4px;
-	}
 </style>
 
 <h1> Round {round} </h1>
@@ -201,5 +249,4 @@
     <button disabled={checkRound5} class="preview" on:click={switchToPreview}>Preview</button>
     <button class="submit" on:click={submitAttempt}>Submit</button>
   </div>
-  <div class="box" style="background-color: rgb({userRed}, {userGreen}, {userBlue})"></div>
 {/if}

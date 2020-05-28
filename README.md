@@ -25,6 +25,18 @@ cd svelte-app
 npm install
 ```
 
+Install the required npm packages
+
+```bash
+npm install express cors johnny-five
+```
+
+Then to run server alongside Svelte apps
+
+```bash
+npm run project
+```
+
 ...then start [Rollup](https://rollupjs.org):
 
 ```bash

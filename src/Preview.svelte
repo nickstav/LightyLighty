@@ -1,9 +1,9 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { arduinoRed, arduinoGreen, arduinoBlue, setArduinoColour } from './arduino.js';
 
   const dispatch = createEventDispatcher();
 
+  // call function to switch to PLay mode when button is pressed
   function goToPlay() {
     dispatch('clicked', {
       playMode: true,
@@ -41,16 +41,7 @@
     border: 1px solid white;
     padding: 4px;
   }
-  .box {
-		width: 50px;
-		height: 50px;
-		position: absolute;
-    top: 88%;
-    left: 90%;
-		border-radius: 4px;
-	}
 </style>
 
 <p>Observe the LCD colour and click <span class="play">Play</span> to make your choice</p>
 <button on:click={goToPlay}>Play</button>
-<div class="box" style="background-color: rgb({arduinoRed}, {arduinoGreen}, {arduinoBlue})"></div>

@@ -1,11 +1,18 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-
   const dispatch = createEventDispatcher();
+
+  import { resultToServer } from './fetch.js';
+  import { getHeader, getParagraph } from './display.js'
+
+  const serverAddress = 'http://localhost:4000/enlightylightenment/'
+
+  // define required % accuracy to win the game
+  const requiredScore = 15;
 
   export let oneScore, twoScore, threeScore, fourScore, fiveScore, finalScore;
 
-  const requiredScore = 10;
+/* -----------------Event dispatcher to quit the game-------------------------*/
 
   function quitGame() {
       dispatch('quit', {
@@ -13,24 +20,16 @@
       });
     }
 
-  function getHeader(score) {
-    if (score <  requiredScore) {
-      return 'Congratulations!';
-    } else {
-      return 'Game Over';
-    };
-  }
+/* -------------------Send results to the server------------------------------*/
 
-  function getParagraph(score) {
-    if (score < requiredScore) {
-      return `Your accuracy was less than ${requiredScore}%!`;
-    } else {
-      return `You didn't get within ${requiredScore}%. Try again!`;
-    };
-  }
+resultToServer(serverAddress, finalScore);
 
-  const resultHeader = getHeader(finalScore);
-  const resultParagraph = getParagraph(finalScore);
+/* ------------- --Display the results on the page----------------------------*/
+
+  const resultHeader = getHeader(finalScore, requiredScore);
+  const resultParagraph = getParagraph(finalScore, requiredScore);
+
+/* --------------------------------------------------------------------------*/
 
 </script>
 
