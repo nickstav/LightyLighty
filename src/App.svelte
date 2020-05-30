@@ -94,16 +94,29 @@
 </script>
 
 <style>
+	@font-face {
+		font-family: 'Avenir Next';
+		src: url("../fonts/AvenirNext-Regular.ttf");
+		src: url("../fonts/AvenirNext-Regular.eot");
+		src: url("../fonts/AvenirNext-Regular.otf");
+		src: url("../fonts/AvenirNext-Regular.svg");
+		src: url("../fonts/AvenirNext-Regular.woff");
+		font-weight: normal;
+		font-style: normal;
+	}
+	:global(body) {
+		font-family: 'Avenir Next';
+		margin: 0;
+	}
 	body {
-		background-color: #565656;
-		padding: 0px;
+		background-image: linear-gradient(to right, #999999 , #333333);
+		padding: 0;
 	}
 	h1 {
 		width: 100%;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		background-color: #262626;
-		font-family: "Lucida Console", Courier, monospace;
+		background-color: #1F1F1F;
 		font-weight: 900;
 		font-size: 16px;
 		color: white;

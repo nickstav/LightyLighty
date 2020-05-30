@@ -37,7 +37,6 @@ resultToServer(serverAddress, finalScore);
 <style>
   h1 {
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
     font-weight: 100;
     font-size: 30px;
     text-align: center;
@@ -49,7 +48,6 @@ resultToServer(serverAddress, finalScore);
   table {
     color: white;
     border: 1px white;
-    font-family: "Lucida Console", Courier, monospace;
     font-weight: 100;
     font-size: 12px;
     text-align: center;
@@ -70,7 +68,6 @@ resultToServer(serverAddress, finalScore);
   }
   p {
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
 		font-weight: 100;
 		font-size: 12px;
     text-align: center;
@@ -78,11 +75,11 @@ resultToServer(serverAddress, finalScore);
   button {
     background: none;
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
     position: absolute;
     top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
   }
   button:hover {
     background: white;

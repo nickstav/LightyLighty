@@ -15,7 +15,6 @@
 <style>
   p {
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
 		font-weight: 100;
 		font-size: 12px;
     text-align: center;
@@ -27,11 +26,11 @@
   button {
     background: none;
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
     position: absolute;
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
   }
   button:hover {
     background: white;

@@ -18,12 +18,12 @@
   button {
     background: none;
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
     font-size: 10px;
     position: absolute;
     top: 3.5%;
     left: 97%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
   }
   button:hover {
     background: white;

@@ -14,7 +14,6 @@ function connectArduino() {
 <style>
   h1 {
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
 		font-weight: 100;
 		font-size: 20px;
     text-align: center;
@@ -25,7 +24,6 @@ function connectArduino() {
   }
   p {
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
 		font-weight: 100;
 		font-size: 12px;
     text-align: center;
@@ -41,11 +39,11 @@ function connectArduino() {
   button {
     background: none;
     color: white;
-    font-family: "Lucida Console", Courier, monospace;
     position: absolute;
     top: 65%;
     left: 50%;
     transform: translate(-50%, -50%);
+    cursor: pointer;
   }
   button:hover {
     background: white;
