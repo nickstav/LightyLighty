@@ -1,13 +1,5 @@
 /* ----------------------------App.svelte-----------------------------------*/
 
-export function disablePreview(currentRound) {
-  if (currentRound == 5) {
-    return true;
-  } else {
-    return false;
-  };
-}
-
 export function setButtonText(currentRound) {
   if (currentRound < 5) {
     return 'Next Round';
@@ -32,4 +24,30 @@ export function getParagraph(score, requiredScore) {
   } else {
     return `You didn't get within ${requiredScore}%. Try again!`;
   };
+}
+
+/* ---------------------------Play.svelte-----------------------------------*/
+
+export function changeTextForRound5(round) {
+  if (round == 5) {
+    return `You cannot go back to Preview mode for this one.`;
+  } else {
+    return `You can return to <strong>Preview Mode</strong> for another look. Hit Check when complete`;
+  };
+}
+
+export function disablePreview(currentRound, isGuessing) {
+  if (currentRound == 5 && isGuessing == true) {
+    return true;
+  } else {
+    return false;
+  };
+}
+
+// function to get the position for display over the slider thumb
+export function ledDisplay(colour) {
+  /* weird magic number that seems to adjust the position to stay over the
+  slider...  https://css-tricks.com/value-bubbles-for-range-inputs */
+  const position = (colour + (8 - (colour * 0.15)));
+  return position;
 }

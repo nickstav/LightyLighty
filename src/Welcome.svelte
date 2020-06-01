@@ -1,21 +1,30 @@
 <script>
-import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
+  import { randomNeonColour } from './calculations.js'
 
-const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
-function connectArduino() {
-  dispatch('clicked', {
-    ready: true,
-  });
-}
+  function connectArduino() {
+    dispatch('clicked', {
+      ready: true,
+    });
+  }
+
+  // random neon colour for the splash page
+  const neonColour = randomNeonColour();
 
 </script>
 
 <style>
+  :root {
+    --neon-colour: {neonColour};
+  }
+  body {
+    background-image: linear-gradient(to right, var(--neon-colour) , #222222);
+  }
   h1 {
     color: white;
-		font-weight: 100;
-		font-size: 20px;
+		font-size: 35px;
     text-align: center;
     position: absolute;
     top: 48%;
@@ -24,33 +33,33 @@ function connectArduino() {
   }
   p {
     color: white;
-		font-weight: 100;
-		font-size: 12px;
+		font-size: 13px;
     text-align: center;
     position: absolute;
-    top: 54%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
   .appName {
-    font-weight: 900;
-    font-size: 24px;
+    font-family: 'Avenir Next Bold';
   }
   button {
-    background: none;
-    color: white;
+    background-image: url("../button/connect.png");
+    background-size: 100%;
+    border: 1px solid white;
+    font-size: 50px;
     position: absolute;
-    top: 65%;
-    left: 50%;
+    top: 4.5%;
+    left: 97%;
     transform: translate(-50%, -50%);
     cursor: pointer;
   }
   button:hover {
-    background: white;
-    color: #565656;
+    border: 3px solid white;
   }
 </style>
 
+<body style="background-image: linear-gradient(to right, {neonColour} , #222222)"></body>
 <h1> Welcome to <span class="appName">LightyLighty</span></h1>
-<p> Please connect your Arduino and click the Connect button to begin </p>
-<button on:click={connectArduino}>Connect</button>
+<p> Attach your Arduino, then click the connect button above to begin </p>
+<button on:click={connectArduino}></button>

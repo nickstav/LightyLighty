@@ -31,8 +31,8 @@
 
 <style>
   h1 {
+    font-family: 'Avenir Next Bold';
     color: white;
-		font-weight: 100;
 		font-size: 30px;
     text-align: center;
     position: absolute;
@@ -42,7 +42,6 @@
   }
   h2 {
     color: white;
-		font-weight: 100;
 		font-size: 12px;
     text-align: center;
     position: absolute;
@@ -57,12 +56,13 @@
   }
   p {
     color: white;
-		font-weight: 100;
 		font-size: 10px;
     text-align: center;
   }
   button {
-    background: none;
+    font-size: 15px;
+    background: black;
+    border: none;
     color: white;
     position: absolute;
     top: 80%;

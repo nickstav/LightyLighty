@@ -1,17 +1,17 @@
 <script>
-  import Preview from './Preview.svelte';
   import { createEventDispatcher } from 'svelte';
   import { convertToPercentage } from './calculations.js';
+  import { disablePreview, changeTextForRound5, ledDisplay } from './display.js'
 
   const dispatch = createEventDispatcher();
 
   export let round = 1;
-  export let checkRound5;
-
-  let updateServer;
 
   //variable to track whether to display Preview Mode or Play ('Guessing') Mode
-  let isGuessing = false;
+  export let isGuessing = false;
+
+  let buttonText = 'Guess Mode';
+  
   //variable to define when to stop sending data to the server
   let hasGuessed = false;
 
@@ -24,6 +24,11 @@
   $: userGreenPercentage = convertToPercentage(userGreen);
   let userBlue = 0;
   $: userBluePercentage = convertToPercentage(userBlue);
+
+  // display the values of the sliders
+  $: redLED = ledDisplay(userRedPercentage);
+  $: greenLED = ledDisplay(userGreenPercentage);
+  $: blueLED = ledDisplay(userBluePercentage);
 
   // the api parameters to send the relevant data to the server
   $: colourParams = `${userRed}/${userGreen}/${userBlue}/${isGuessing}`;
@@ -62,17 +67,21 @@
   }
 
   // call the above function every 500ms
-  updateServer = setInterval(sendSliderValues, 500);
+  let updateServer = setInterval(sendSliderValues, 500);
 
 /* ------------------------Event handling------------------------------------*/
 
-  function switchToPreview() {
-    isGuessing = false;
-  }
+  $: checkRound5 = disablePreview(round, isGuessing);
 
-  // function to switch back to play mode when button pressed
-  function switchToPlay(event) {
-    isGuessing = event.detail.playMode;
+  let secondParagraph = changeTextForRound5(round);
+
+  function switchModes() {
+    if (isGuessing) {
+      buttonText = 'Guess Mode';
+    } else {
+      buttonText = 'Preview Mode';
+    };
+    isGuessing = !isGuessing;
   }
 
   // once submitted, all relevant data to be passed via event dispatcher
@@ -95,9 +104,9 @@
 
 <style>
   h1 {
+    font-family: 'Avenir Next Bold';
     color: white;
-		font-weight: 100;
-		font-size: 30px;
+		font-size: 35px;
     text-align: center;
     position: absolute;
     top: 10%;
@@ -106,7 +115,6 @@
   }
   h2 {
     color: white;
-    font-weight: 100;
     font-size: 12px;
     text-align: center;
     position: absolute;
@@ -116,7 +124,6 @@
   }
   p {
     color: white;
-		font-weight: 400;
 		font-size: 12px;
     text-align: center;
     position: absolute;
@@ -126,12 +133,25 @@
   .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
             appearance: none;
-    width: 80%;
-    height: 25px;
+    background: none;
+    border: none;
+    width: 90%;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-    outline: none;
+  }
+  .slider::-webkit-progress-value {
+    height: 25px;
+    border-top: 2px solid #565656;
+    border-bottom: 2px solid #565656;
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+  }
+  .slider::-moz-range-progress {
+    height: 25px;
+    border-top: 2px solid #565656;
+    border-bottom: 2px solid #565656;
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
@@ -143,71 +163,75 @@
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none; /* Override default look */
             appearance: none;
-    width: 25px;
-    height: 25px;
+    width: 55px;
+    height: 55px;
+    border-radius: 10% 50% 50% 10%;
     cursor: pointer;
   }
   .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
+    width: 55px;
+    height: 55px;
+    border-radius: 10% 50% 50% 10%;
+    border: none;
     cursor: pointer;
   }
-  .bubble {
-    background: red;
-    color: white;
-    padding: 4px 12px;
-    position: absolute;
-    border-radius: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .bubble::after {
-    content: "";
-    position: absolute;
-    width: 2px;
-    height: 2px;
-    background: red;
-    top: -1px;
-    left: 50%;
-  }
   .red {
-    top: 25%;
-  }
-  p.red {
-    top: 28%;
+    top: 30%;
   }
   .red::-webkit-slider-thumb {
-    background: #B53737;
+    background-color: rgb(var(--redLED),0,0);
+    box-shadow: 0px 0px 50px 10px rgb(var(--redLED),0,0);
   }
   .red::-moz-range-thumb {
-    background: #B53737;
+    background-color: rgb(var(--redLED),0,0);
+    box-shadow: 0px 0px 50px 10px rgb(var(--redLED),0,0);
   }
   .green {
     top: 50%;
   }
-  p.green {
-    top: 53%;
-  }
   .green::-webkit-slider-thumb {
-    background: #4CAF50;
+    background-color: rgb(0,var(--greenLED),0);
+    box-shadow: 0px 0px 50px 10px rgb(0,var(--greenLED),0);
   }
   .green::-moz-range-thumb {
-    background: #4CAF50;
+    background-color: rgb(0,var(--greenLED),0);
+    box-shadow: 0px 0px 50px 10px rgb(0,var(--greenLED),0);
   }
   .blue {
-    top:75%;
-  }
-  p.blue {
-    top: 78%;
+    top:70%;
   }
   .blue::-webkit-slider-thumb {
-    background: #2A9DF4;
+    background-color: rgb(0,0,var(--blueLED));
+    box-shadow: 0px 0px 50px 10px rgb(0,0,var(--blueLED));
   }
   .blue::-moz-range-thumb {
-    background: #2A9DF4;
+    background-color: rgb(0,0,var(--blueLED));
+    box-shadow: 0px 0px 50px 10px rgb(0,0,var(--blueLED));
+  }
+  .redDisplay {
+    position: absolute;
+    top: 28%;
+    left: var(--positionRed);
+    pointer-events: none;
+  }
+  .greenDisplay {
+    position: absolute;
+    top: 48%;
+    left: var(--positionGreen);
+    pointer-events: none;
+  }
+  .blueDisplay {
+    position: absolute;
+    top: 68%;
+    left: var(--positionBlue);
+    pointer-events: none;
   }
   button {
-    background: none;
+    font-size: 15px;
+    background: black;
+    border: none;
+    width: 12%;
+    padding: 5px;
     color: white;
     position: absolute;
     top: 90%;
@@ -230,20 +254,29 @@
 </style>
 
 <h1> Round {round} </h1>
+<div class="button">
+  <button disabled={checkRound5} class="preview" on:click={switchModes}>{buttonText}</button>
+  <button disabled={!isGuessing} class="submit" on:click={submitAttempt}>Check</button>
+</div>
 {#if round ==5}
   <h2> You will not be able to go back to preview mode for this one!</h2>
 {/if}
-{#if !isGuessing}
-	<Preview on:clicked={switchToPlay}/>
-{:else}
-  <input type="range" class ="slider red" min=0 max=255 bind:value={userRed}>
-  <p class="red">Red:{userRedPercentage}%</p>
-  <input type="range" class="slider green" min=0 max=255 bind:value={userGreen}>
-  <p class="green">Green:{userGreenPercentage}%</p>
-  <input type="range" class="slider blue" min=0 max=255 bind:value={userBlue}>
-  <p class="blue">Blue:{userBluePercentage}%</p>
-  <div class="button">
-    <button disabled={checkRound5} class="preview" on:click={switchToPreview}>Preview</button>
-    <button class="submit" on:click={submitAttempt}>Submit</button>
+{#if isGuessing}
+  <input style="--redLED: {userRed}" type="range" class ="slider red" min=0 max=255 bind:value={userRed}>
+  <input style="--greenLED: {userGreen}"type="range" class="slider green" min=0 max=255 bind:value={userGreen}>
+  <input style="--blueLED: {userBlue}"type="range" class="slider blue" min=0 max=255 bind:value={userBlue}>
+  <p style="top: 78%">This is <strong>Guess Mode</strong>. Adjust your sliders to closely match the target LED colour.</p>
+  <p style="top: 82%">{@html secondParagraph}</p>
+  <div class="redDisplay" style="--positionRed: {redLED}%">
+    <p>Red {userRedPercentage}%</p>
   </div>
+  <div class="greenDisplay" style="--positionGreen: {greenLED}%">
+    <p>Green {userGreenPercentage}%</p>
+  </div>
+  <div class="blueDisplay" style="--positionBlue: {blueLED}%">
+    <p>Blue {userBluePercentage}%</p>
+  </div>
+{:else}
+  <p style="top: 48%">You are in <strong>Preview Mode</strong>. Take note of the LED colour you need to match</p>
+  <p style="top: 52%">Click the <strong>Guess Mode</strong> button below to adjust your own RGB values</p>
 {/if}

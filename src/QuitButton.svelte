@@ -16,19 +16,19 @@
 
 <style>
   button {
-    background: none;
-    color: white;
-    font-size: 10px;
+    background-image: url("../button/disconnect.png");
+    background-size: 100%;
+    border: 1px solid white;
+    font-size: 50px;
     position: absolute;
-    top: 3.5%;
+    top: 4.5%;
     left: 97%;
     transform: translate(-50%, -50%);
     cursor: pointer;
   }
   button:hover {
-    background: white;
-    color: #565656;
+    border: 3px solid white;
   }
 </style>
 
-<button on:click={quitGame}>Quit</button>
+<button on:click={quitGame}></button>

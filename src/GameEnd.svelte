@@ -20,7 +20,7 @@
       });
     }
 
-/* -------------------Send results to the server------------------------------*/
+/* ---------Send results to the server for light show-------------------------*/
 
 resultToServer(serverAddress, finalScore);
 
@@ -36,8 +36,8 @@ resultToServer(serverAddress, finalScore);
 
 <style>
   h1 {
+    font-family: 'Avenir Next Bold';
     color: white;
-    font-weight: 100;
     font-size: 30px;
     text-align: center;
     position: absolute;
@@ -48,7 +48,6 @@ resultToServer(serverAddress, finalScore);
   table {
     color: white;
     border: 1px white;
-    font-weight: 100;
     font-size: 12px;
     text-align: center;
     margin: auto;
@@ -73,7 +72,8 @@ resultToServer(serverAddress, finalScore);
     text-align: center;
   }
   button {
-    background: none;
+    background: black;
+    border: none;
     color: white;
     position: absolute;
     top: 80%;

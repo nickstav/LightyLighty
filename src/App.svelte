@@ -6,7 +6,7 @@
 	import GameEnd from './GameEnd.svelte';
 
 	import { checkConnection, changeArduinoColour } from './fetch.js'
-	import { setButtonText, disablePreview } from './display.js'
+	import { setButtonText } from './display.js'
 
 	//define a server address for starting the game and moving onto subsequent rounds
 	const serverAddress = 'http://localhost:4000/startRound';
@@ -21,7 +21,6 @@
 	let guessComplete = false;
 	let gameFinished = false;
 	// define variable to check if we are round 5 or not (to disable Preview)
-	let checkRound;
 
 /* ------------------------Event handling------------------------------------*/
 
@@ -64,7 +63,6 @@
 			//move onto the next round and check if we need to disable the preview button
 			guessComplete = false;
 			round += 1;
-			checkRound = disablePreview(round);
 			changeArduinoColour(serverAddress);
 		} else {
 			//game is finished and call the finishGame function
@@ -104,35 +102,49 @@
 		font-weight: normal;
 		font-style: normal;
 	}
+	@font-face {
+		font-family: 'Avenir Next Bold';
+		src: url("../fonts/AvenirNext-Bold.ttf");
+		src: url("../fonts/AvenirNext-Bold.eot");
+		src: url("../fonts/AvenirNext-Bold.otf");
+		src: url("../fonts/AvenirNext-Bold.svg");
+		src: url("../fonts/AvenirNext-Bold.woff");
+		font-weight: bold;
+		font-style: normal;
+	}
 	:global(body) {
 		font-family: 'Avenir Next';
-		margin: 0;
 	}
 	body {
-		background-image: linear-gradient(to right, #999999 , #333333);
+		background-image: linear-gradient(to right, #444444 , #222222);
+		margin: 0;
 		padding: 0;
 	}
 	h1 {
+		font-family: 'Avenir Next Bold';
 		width: 100%;
 		padding-top: 10px;
 		padding-bottom: 10px;
+		margin: 0px;
 		background-color: #1F1F1F;
-		font-weight: 900;
-		font-size: 16px;
+		font-weight: bolder;
+		font-size: 20px;
 		color: white;
 	}
 </style>
 
 <body>
 	<h1>LightyLighty</h1>
-	<QuitButton on:quit={quitGame}/>
 {#if !isReady}
 	<Welcome on:clicked={startGame}/>
 {:else if gameFinished}
 	<GameEnd on:quit={quitGame} {...pkgEnd}/>
+	<QuitButton on:quit={quitGame}/>
 {:else if !guessComplete}
-	<Play checkRound5={checkRound} round={round} on:submitted={showResult}/>
+	<Play round={round} on:submitted={showResult}/>
+	<QuitButton on:quit={quitGame}/>
 {:else}
 	<Results on:nextRound={startNextRound} {...pkgRound}/>
+	<QuitButton on:quit={quitGame}/>
 {/if}
 </body>
