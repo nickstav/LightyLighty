@@ -6,7 +6,7 @@
 	import GameEnd from './GameEnd.svelte';
 
 	import { checkConnection, changeArduinoColour } from './fetch.js'
-	import { setButtonText } from './display.js'
+	import { setButtonText, getBackgroundColour } from './display.js'
 
 	//define a server address for starting the game and moving onto subsequent rounds
 	const serverAddress = 'http://localhost:4000/startRound';
@@ -17,10 +17,12 @@
 	// start at round 1
 	let round = 1;
 	// define variables to track progress of game
-	let isReady = false;
 	let guessComplete = false;
 	let gameFinished = false;
-	// define variable to check if we are round 5 or not (to disable Preview)
+	let isReady = true;
+	// random neon colour for the splash page or grey fade for rest of the app
+	let backgroundColour = getBackgroundColour(isReady);
+
 
 /* ------------------------Event handling------------------------------------*/
 
@@ -36,7 +38,7 @@
   // use event dispatcher from QuitButton to quit the game and reset game variables
 	function quitGame(event) {
 		isReady = event.detail.isPlaying;
-		round = 1;
+		round = 4;
 		results = [];
 		gameFinished = false;
 		guessComplete = false;
@@ -92,59 +94,35 @@
 </script>
 
 <style>
-	@font-face {
-		font-family: 'Avenir Next';
-		src: url("../fonts/AvenirNext-Regular.ttf");
-		src: url("../fonts/AvenirNext-Regular.eot");
-		src: url("../fonts/AvenirNext-Regular.otf");
-		src: url("../fonts/AvenirNext-Regular.svg");
-		src: url("../fonts/AvenirNext-Regular.woff");
-		font-weight: normal;
-		font-style: normal;
-	}
-	@font-face {
-		font-family: 'Avenir Next Bold';
-		src: url("../fonts/AvenirNext-Bold.ttf");
-		src: url("../fonts/AvenirNext-Bold.eot");
-		src: url("../fonts/AvenirNext-Bold.otf");
-		src: url("../fonts/AvenirNext-Bold.svg");
-		src: url("../fonts/AvenirNext-Bold.woff");
-		font-weight: bold;
-		font-style: normal;
-	}
-	:global(body) {
-		font-family: 'Avenir Next';
-	}
-	body {
-		background-image: linear-gradient(to right, #444444 , #222222);
-		margin: 0;
-		padding: 0;
+	.background {
+		position: absolute;
+		height:100%;
+		width:100%;
+		background-image: linear-gradient(to right, var(--background-colour), #222222);
 	}
 	h1 {
 		font-family: 'Avenir Next Bold';
 		width: 100%;
 		padding-top: 10px;
 		padding-bottom: 10px;
-		margin: 0px;
+		margin: 0;
 		background-color: #1F1F1F;
-		font-weight: bolder;
 		font-size: 20px;
-		color: white;
 	}
 </style>
 
-<body>
+<div class="background" style="--background-colour: {backgroundColour}">
 	<h1>LightyLighty</h1>
-{#if !isReady}
-	<Welcome on:clicked={startGame}/>
-{:else if gameFinished}
-	<GameEnd on:quit={quitGame} {...pkgEnd}/>
-	<QuitButton on:quit={quitGame}/>
-{:else if !guessComplete}
-	<Play round={round} on:submitted={showResult}/>
-	<QuitButton on:quit={quitGame}/>
-{:else}
-	<Results on:nextRound={startNextRound} {...pkgRound}/>
-	<QuitButton on:quit={quitGame}/>
-{/if}
-</body>
+	{#if !isReady}
+		<Welcome on:clicked={startGame}/>
+	{:else if gameFinished}
+		<GameEnd on:quit={quitGame} {...pkgEnd}/>
+		<QuitButton on:quit={quitGame}/>
+	{:else if !guessComplete}
+		<Play round={round} on:submitted={showResult}/>
+		<QuitButton on:quit={quitGame}/>
+	{:else}
+		<Results on:nextRound={startNextRound} {...pkgRound}/>
+		<QuitButton on:quit={quitGame}/>
+	{/if}
+</div>

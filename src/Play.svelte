@@ -11,7 +11,7 @@
   export let isGuessing = false;
 
   let buttonText = 'Guess Mode';
-  
+
   //variable to define when to stop sending data to the server
   let hasGuessed = false;
 
@@ -103,9 +103,9 @@
 </script>
 
 <style>
-  h1 {
+/* -----------------------------Positioning----------------------------------*/
+  h2 {
     font-family: 'Avenir Next Bold';
-    color: white;
 		font-size: 35px;
     text-align: center;
     position: absolute;
@@ -113,45 +113,100 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  h2 {
-    color: white;
+  p {
     font-size: 12px;
-    text-align: center;
+  }
+  p.round5Warning {
+    font-size: 12px;
     position: absolute;
     top: 18%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  p {
-    color: white;
-		font-size: 12px;
-    text-align: center;
+  .previewInstructions {
     position: absolute;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
+    height: 5%;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
+  .guessInstructions {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%, -50%);
+    height: 10%;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  .userSliders {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 50%;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .redDisplay {
+    width: 10px;
+    position: absolute;
+    top: 22%;
+    left: var(--positionRed);
+    pointer-events: none;
+  }
+  .greenDisplay {
+    width: 10px;
+    position: absolute;
+    top: 45%;
+    left: var(--positionGreen);
+    pointer-events: none;
+  }
+  .blueDisplay {
+    width: 10px;
+    position: absolute;
+    top: 68%;
+    left: var(--positionBlue);
+    pointer-events: none;
+  }
+  .button {
+    width: 30%;
+    height: 5%;
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+  }
+/* -----------------------------Styling--------------------------------------*/
   .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
             appearance: none;
     background: none;
     border: none;
-    width: 90%;
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
   .slider::-webkit-progress-value {
     height: 25px;
-    border-top: 2px solid #565656;
-    border-bottom: 2px solid #565656;
+    border-top: 2px solid #959595;
+    border-bottom: 2px solid #959595;
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
   }
   .slider::-moz-range-progress {
     height: 25px;
-    border-top: 2px solid #565656;
-    border-bottom: 2px solid #565656;
+    border-top: 2px solid #959595;
+    border-bottom: 2px solid #959595;
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
@@ -175,67 +230,37 @@
     border: none;
     cursor: pointer;
   }
-  .red {
-    top: 30%;
-  }
   .red::-webkit-slider-thumb {
     background-color: rgb(var(--redLED),0,0);
-    box-shadow: 0px 0px 50px 10px rgb(var(--redLED),0,0);
+    box-shadow: 0px 0px var(--redGlow) 0px rgb(var(--redLED),0,0);
   }
   .red::-moz-range-thumb {
     background-color: rgb(var(--redLED),0,0);
-    box-shadow: 0px 0px 50px 10px rgb(var(--redLED),0,0);
-  }
-  .green {
-    top: 50%;
+    box-shadow: 0px 0px var(--redGlow) 0px rgb(var(--redLED),0,0);
   }
   .green::-webkit-slider-thumb {
     background-color: rgb(0,var(--greenLED),0);
-    box-shadow: 0px 0px 50px 10px rgb(0,var(--greenLED),0);
+    box-shadow: 0px 0px var(--greenGlow) 0px rgb(0,var(--greenLED),0);
   }
   .green::-moz-range-thumb {
     background-color: rgb(0,var(--greenLED),0);
-    box-shadow: 0px 0px 50px 10px rgb(0,var(--greenLED),0);
-  }
-  .blue {
-    top:70%;
+    box-shadow: 0px 0px var(--greenGlow) 0px rgb(0,var(--greenLED),0);
   }
   .blue::-webkit-slider-thumb {
     background-color: rgb(0,0,var(--blueLED));
-    box-shadow: 0px 0px 50px 10px rgb(0,0,var(--blueLED));
+    box-shadow: 0px 0px var(--blueGlow) 0px rgb(0,0,var(--blueLED));
   }
   .blue::-moz-range-thumb {
     background-color: rgb(0,0,var(--blueLED));
-    box-shadow: 0px 0px 50px 10px rgb(0,0,var(--blueLED));
-  }
-  .redDisplay {
-    position: absolute;
-    top: 28%;
-    left: var(--positionRed);
-    pointer-events: none;
-  }
-  .greenDisplay {
-    position: absolute;
-    top: 48%;
-    left: var(--positionGreen);
-    pointer-events: none;
-  }
-  .blueDisplay {
-    position: absolute;
-    top: 68%;
-    left: var(--positionBlue);
-    pointer-events: none;
+    box-shadow: 0px 0px var(--blueGlow) 0px rgb(0,0,var(--blueLED));
   }
   button {
     font-size: 15px;
+    color: white;
     background: black;
     border: none;
-    width: 12%;
+    width: 120px;
     padding: 5px;
-    color: white;
-    position: absolute;
-    top: 90%;
-    transform: translate(-50%, -50%);
     cursor: pointer;
   }
   button:hover {
@@ -245,28 +270,22 @@
   button:disabled {
     opacity: 0.3;
   }
-  button.preview {
-    left: 40%;
-  }
-  button.submit {
-    left: 60%;
-  }
 </style>
 
-<h1> Round {round} </h1>
+<h2> Round {round} </h2>
 <div class="button">
   <button disabled={checkRound5} class="preview" on:click={switchModes}>{buttonText}</button>
   <button disabled={!isGuessing} class="submit" on:click={submitAttempt}>Check</button>
 </div>
 {#if round ==5}
-  <h2> You will not be able to go back to preview mode for this one!</h2>
+  <p class="round5Warning"> You will not be able to go back to preview mode for this one!</p>
 {/if}
 {#if isGuessing}
-  <input style="--redLED: {userRed}" type="range" class ="slider red" min=0 max=255 bind:value={userRed}>
-  <input style="--greenLED: {userGreen}"type="range" class="slider green" min=0 max=255 bind:value={userGreen}>
-  <input style="--blueLED: {userBlue}"type="range" class="slider blue" min=0 max=255 bind:value={userBlue}>
-  <p style="top: 78%">This is <strong>Guess Mode</strong>. Adjust your sliders to closely match the target LED colour.</p>
-  <p style="top: 82%">{@html secondParagraph}</p>
+  <div class="userSliders">
+    <input style="--redLED: {userRed};--redGlow:{userRedPercentage}px" type="range" class ="slider red" min=0 max=255 bind:value={userRed}>
+    <input style="--greenLED: {userGreen};--greenGlow:{userGreenPercentage}px" type="range" class="slider green" min=0 max=255 bind:value={userGreen}>
+    <input style="--blueLED: {userBlue};--blueGlow:{userBluePercentage}px" type="range" class="slider blue" min=0 max=255 bind:value={userBlue}>
+  </div>
   <div class="redDisplay" style="--positionRed: {redLED}%">
     <p>Red {userRedPercentage}%</p>
   </div>
@@ -276,7 +295,13 @@
   <div class="blueDisplay" style="--positionBlue: {blueLED}%">
     <p>Blue {userBluePercentage}%</p>
   </div>
+  <div class="guessInstructions">
+    <p>This is <strong>Guess Mode</strong>. Adjust your sliders to closely match the target LED colour.</p>
+    <p>{@html secondParagraph}</p>
+  </div>
 {:else}
-  <p style="top: 48%">You are in <strong>Preview Mode</strong>. Take note of the LED colour you need to match</p>
-  <p style="top: 52%">Click the <strong>Guess Mode</strong> button below to adjust your own RGB values</p>
+  <div class="previewInstructions">
+    <p>You are in <strong>Preview Mode</strong>. Take note of the LED colour you need to match</p>
+    <p>Click the <strong>Guess Mode</strong> button below to adjust your own RGB values</p>
+  </div>
 {/if}

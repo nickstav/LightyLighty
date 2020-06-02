@@ -30,109 +30,115 @@
 
 
 <style>
-  h1 {
+  h2 {
     font-family: 'Avenir Next Bold';
     color: white;
 		font-size: 30px;
-    text-align: center;
     position: absolute;
+    left: 50%;
     top: 10%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .results {
+    position: absolute;
+    height: 50%;
+    width: 20%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
   }
-  h2 {
+  .arduino {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .user {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  .summary {
+    position: absolute;
+    height: 30%;
+    width: 80%;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  h3 {
     color: white;
 		font-size: 12px;
     text-align: center;
-    position: absolute;
-    top: 30%;
-    transform: translate(-50%, -50%);
-  }
-  h2.arduino {
-    left: 40%;
-  }
-  h2.user {
-    left: 60%;
   }
   p {
     color: white;
 		font-size: 10px;
+  }
+  p.summaryParagraph {
+    color: white;
+		font-size: 16px;
     text-align: center;
   }
   button {
-    font-size: 15px;
+    width: 100px;
+    height: 30px;
     background: black;
     border: none;
     color: white;
-    position: absolute;
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     cursor: pointer;
   }
   button:hover {
     background: white;
     color: #565656;
   }
-  .play {
-    border: 1px solid white;
-    padding: 4px;
-  }
   .boxArduino {
 		width: 50px;
 		height: 50px;
-		position: absolute;
-    top: 40%;
-    left: 40%;
-    transform: translate(-50%, -50%);
 	}
   .boxUser {
 		width: 50px;
 		height: 50px;
-		position: absolute;
-    top: 40%;
-    left: 60%;
-    transform: translate(-50%, -50%);
 	}
-  .arduinoResults {
-    position: absolute;
-    top: 50%;
-    left: 40%;
-    transform: translate(-50%, -50%);
-  }
-  .userResults {
-    position: absolute;
-    top: 50%;
-    left: 60%;
-    transform: translate(-50%, -50%);
-  }
-  p.results {
-    position: absolute;
-    top: 65%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
 </style>
 {#await arduinoInfo}
-<p>loading...</p>
+  <p>loading...</p>
 {:then item}
-<h1> Results </h1>
-<h2 class="arduino"> Arduino Colour </h2>
-<div class="boxArduino" style="background-color: rgb({item.red}, {item.green}, {item.blue})"></div>
-<div class="arduinoResults">
-  <p>{item.redPerc}% red</p>
-  <p>{item.greenPerc}% green</p>
-  <p> {item.bluePerc}% blue</p>
-</div>
-<h2 class="user"> User Colour </h2>
-<div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"></div>
-<div class="userResults">
-  <p>{redPercentage}% red</p>
-  <p>{greenPercentage}% green</p>
-  <p> {bluePercentage}% blue</p>
-</div>
-<p class="results">You got within {item.roundScore}% of the Arduino colour!</p>
-<button on:click={newRound}>{buttonText}</button>
+  <h2>Results</h2>
+  <div class = "results">
+    <div class="arduino">
+      <h3> Arduino Colour </h3>
+      <div class="boxArduino" style="background-color: rgb({item.red}, {item.green}, {item.blue})"></div>
+      <div class="arduinoResults">
+        <p>{item.redPerc}% red</p>
+        <p>{item.greenPerc}% green</p>
+        <p> {item.bluePerc}% blue</p>
+      </div>
+    </div>
+    <div class="user">
+      <h3> User Colour </h3>
+      <div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"></div>
+      <div class="userResults">
+        <p>{redPercentage}% red</p>
+        <p>{greenPercentage}% green</p>
+        <p>{bluePercentage}% blue</p>
+      </div>
+    </div>
+  </div>
+  <div class="summary">
+    <p class="summaryParagraph">You got within {item.roundScore}% of the Arduino colour!</p>
+    <button on:click={newRound}>{buttonText}</button>
+  </div>
 {:catch error}
   <p style="color: red">{error.message}</p>
 {/await}

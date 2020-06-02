@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { randomNeonColour } from './calculations.js'
 
   const dispatch = createEventDispatcher();
 
@@ -10,35 +9,23 @@
     });
   }
 
-  // random neon colour for the splash page
-  const neonColour = randomNeonColour();
-
 </script>
 
 <style>
-  :root {
-    --neon-colour: {neonColour};
+  .welcomeText {
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
   }
-  body {
-    background-image: linear-gradient(to right, var(--neon-colour) , #222222);
-  }
-  h1 {
-    color: white;
+  p.intro {
 		font-size: 35px;
-    text-align: center;
-    position: absolute;
-    top: 48%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
-  p {
-    color: white;
+  p.instructions {
 		font-size: 13px;
-    text-align: center;
-    position: absolute;
-    top: 56%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
   .appName {
     font-family: 'Avenir Next Bold';
@@ -46,10 +33,11 @@
   button {
     background-image: url("../button/connect.png");
     background-size: 100%;
+    width: 40px;
+    height: 40px;
     border: 1px solid white;
-    font-size: 50px;
     position: absolute;
-    top: 4.5%;
+    top: 4.2%;
     left: 97%;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -59,7 +47,8 @@
   }
 </style>
 
-<body style="background-image: linear-gradient(to right, {neonColour} , #222222)"></body>
-<h1> Welcome to <span class="appName">LightyLighty</span></h1>
-<p> Attach your Arduino, then click the connect button above to begin </p>
+<div class="welcomeText">
+  <p class="intro">Welcome to <span class="appName">LightyLighty</span></p>
+  <p class="instructions">Attach your Arduino, then click the connect button above to begin</p>
+</div>
 <button on:click={connectArduino}></button>

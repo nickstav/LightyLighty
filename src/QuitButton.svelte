@@ -19,7 +19,8 @@
     background-image: url("../button/disconnect.png");
     background-size: 100%;
     border: 1px solid white;
-    font-size: 50px;
+    width: 40px;
+    height: 40px;
     position: absolute;
     top: 4.5%;
     left: 97%;

@@ -35,7 +35,7 @@ resultToServer(serverAddress, finalScore);
 
 
 <style>
-  h1 {
+  h2 {
     font-family: 'Avenir Next Bold';
     color: white;
     font-size: 30px;
@@ -72,11 +72,13 @@ resultToServer(serverAddress, finalScore);
     text-align: center;
   }
   button {
+    width: 100px;
+    height: 30px;
     background: black;
     border: none;
     color: white;
     position: absolute;
-    top: 80%;
+    top: 90%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -88,7 +90,7 @@ resultToServer(serverAddress, finalScore);
 
 </style>
 
-<h1>{resultHeader}</h1>
+<h2>{resultHeader}</h2>
 <div class="results">
   <table style="width:30%">
     <tr>
