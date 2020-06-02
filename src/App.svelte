@@ -19,7 +19,7 @@
 	// define variables to track progress of game
 	let guessComplete = false;
 	let gameFinished = false;
-	let isReady = true;
+	let isReady = false;
 	// random neon colour for the splash page or grey fade for rest of the app
 	let backgroundColour = getBackgroundColour(isReady);
 

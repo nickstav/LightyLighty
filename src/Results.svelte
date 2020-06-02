@@ -90,6 +90,9 @@
 		font-size: 16px;
     text-align: center;
   }
+  p.error {
+    font-size: 20px;
+  }
   button {
     width: 100px;
     height: 30px;
@@ -140,5 +143,5 @@
     <button on:click={newRound}>{buttonText}</button>
   </div>
 {:catch error}
-  <p style="color: red">{error.message}</p>
+  <p class="error" style="color: red">{error.message}</p>
 {/await}
