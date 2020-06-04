@@ -1,24 +1,24 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  import { getResults } from './fetch.js'
+  import { createEventDispatcher } from 'svelte'
+  import { getResults } from '../Game/fetch'
+  import { gameProgress } from '../Game/store'
 
   export let redValue, greenValue, blueValue;
   export let redPercentage, greenPercentage, bluePercentage;
   export let buttonText;
 
-  const serverAddress = 'http://localhost:4000/results/';
-
   const dispatch = createEventDispatcher();
 
 /* --------------------------Get the results---------------------------------*/
 
+  const serverAddress = 'http://localhost:4000/results/';
   let arduinoInfo = getResults(serverAddress, redPercentage, greenPercentage, bluePercentage);
 
 /* ------------------------Event handling------------------------------------*/
 
   async function newRound(){
-    const results = await arduinoInfo;
-    const score = results.roundScore;
+    const resultsFromServer = await arduinoInfo;
+    const score = resultsFromServer.roundScore;
     dispatch('nextRound', {
       score: score,
     });
@@ -31,47 +31,35 @@
 
 <style>
   h2 {
+    margin: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-family: 'Avenir Next Bold';
     color: white;
 		font-size: 30px;
-    position: absolute;
-    left: 50%;
-    top: 10%;
-    transform: translate(-50%, -50%);
-    text-align: center;
   }
-  .results {
-    position: absolute;
-    height: 50%;
-    width: 20%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  #results {
     display: flex;
     justify-content: space-between;
-    text-align: center;
+    align-items: center;
+    padding-top: 100px;
+    padding-bottom: 80px;
   }
-  .arduino {
-    height: 300px;
+  #arduino {
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
+    padding-right: 20px;
   }
-  .user {
-    height: 300px;
+  #user {
     display: flex;
     flex-direction: column;
     text-align: center;
     align-items: center;
+    padding-left: 20px;
   }
-  .summary {
-    position: absolute;
-    height: 30%;
-    width: 80%;
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  #summary {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -118,27 +106,27 @@
   <p>loading...</p>
 {:then item}
   <h2>Results</h2>
-  <div class = "results">
-    <div class="arduino">
-      <h3> Arduino Colour </h3>
-      <div class="boxArduino" style="background-color: rgb({item.red}, {item.green}, {item.blue})"></div>
-      <div class="arduinoResults">
+  <div id="results">
+    <div id="arduino">
+      <h3>Arduino</h3>
+      <div class="boxArduino" style="background-color: rgb({item.red}, {item.green}, {item.blue})"/>
+      <div id="arduinoResults">
         <p>{item.redPerc}% red</p>
         <p>{item.greenPerc}% green</p>
         <p> {item.bluePerc}% blue</p>
       </div>
     </div>
-    <div class="user">
-      <h3> User Colour </h3>
-      <div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"></div>
-      <div class="userResults">
+    <div id="user">
+      <h3>User</h3>
+      <div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"/>
+      <div id="userResults">
         <p>{redPercentage}% red</p>
         <p>{greenPercentage}% green</p>
         <p>{bluePercentage}% blue</p>
       </div>
     </div>
   </div>
-  <div class="summary">
+  <div id="summary&button">
     <p class="summaryParagraph">You got within {item.roundScore}% of the Arduino colour!</p>
     <button on:click={newRound}>{buttonText}</button>
   </div>

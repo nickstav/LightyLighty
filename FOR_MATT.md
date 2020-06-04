@@ -1,21 +1,26 @@
 POINTS TO TALK ABOUT WITH MATTHEW JOSIAH EBENEEZER BREALEY
 
+- Once quitting the game, I can't seem to get it going again. The game progress
+  store looks correct when we restart, and the app flows okay... it just doesn't
+  seem to talk to the led anymore (which it should because there's nothing server
+  side I can think of would stop it doing so)... have I missed something obvious
+  or is this linked to why it won't detect the Arduino if connected after script
+  run...?
+
+- Goddamn I tried removing the event dispatchers as you said. I broke everything
+  and have attempted to piece it back together... seems to work... but sorry I
+  couldn't package all the functions outside the components :-(
+
 - The placement of the big function within Play.svelte as noted
 
 - Look into why my Arduino isn't being detected once plugged in after script is run
 
-- Managed to bodge the background by using a <div> , though would be interesting to
-  see if/how we can use dynamic css variables with <body> itself (I really like
-  declaring variables inside the css code as one can do with standard JS)
+- I really like declaring variables inside the css code (as one can do with standard
+  JS) rather than inline within the html bit at the bottom of each component
 
 - How to get slider track to overlap to the left (so still displaying when value = 0)
-
-- How to put a variable within the box-shadow so glow is prop. to value (I tried the
-  format 0px 0px var(--glow) 10px with "--glow: {number}px" but no worky)
 
 - I know my results page looks different to the design brief, but we're heading out
   now and I don't have the time to put in a slider with initial values as the final
   values and then disable the slider so its just for display. So that's how I'd do
-  it. I _could_ do it tomorrow and send it across after, but I'd like you to have a
-  look at the code before we meet up tomorrow. So that's my excuse. And it's a good
-  one. So there. Words.
+  it.

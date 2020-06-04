@@ -1,27 +1,18 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
 
-  import { resultToServer } from './fetch.js';
-  import { getHeader, getParagraph } from './display.js'
-
-  const serverAddress = 'http://localhost:4000/enlightylightenment/'
+  import { gameProgress } from '../Game/store'
+  import { resultToServer } from '../Game/fetch';
+  import { getHeader, getParagraph } from '../Game/display'
+  import { quitGame } from '../Game/progress'
 
   // define required % accuracy to win the game
   const requiredScore = 15;
 
   export let oneScore, twoScore, threeScore, fourScore, fiveScore, finalScore;
 
-/* -----------------Event dispatcher to quit the game-------------------------*/
-
-  function quitGame() {
-      dispatch('quit', {
-        isPlaying: false,
-      });
-    }
-
 /* ---------Send results to the server for light show-------------------------*/
 
+const serverAddress = 'http://localhost:4000/enlightylightenment/';
 resultToServer(serverAddress, finalScore);
 
 /* ------------- --Display the results on the page----------------------------*/
@@ -37,13 +28,12 @@ resultToServer(serverAddress, finalScore);
 <style>
   h2 {
     font-family: 'Avenir Next Bold';
-    color: white;
     font-size: 30px;
-    text-align: center;
-    position: absolute;
-    top: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 10px;
+  }
+  #results {
+    padding: 60px;
   }
   table {
     color: white;
@@ -59,15 +49,7 @@ resultToServer(serverAddress, finalScore);
   th, td {
   padding: 10px;
   }
-  .results {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
   p {
-    color: white;
-		font-weight: 100;
 		font-size: 12px;
     text-align: center;
   }
@@ -77,10 +59,6 @@ resultToServer(serverAddress, finalScore);
     background: black;
     border: none;
     color: white;
-    position: absolute;
-    top: 90%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     cursor: pointer;
   }
   button:hover {
@@ -91,7 +69,7 @@ resultToServer(serverAddress, finalScore);
 </style>
 
 <h2>{resultHeader}</h2>
-<div class="results">
+<div id="results">
   <table style="width:30%">
     <tr>
       <th>Round</th>

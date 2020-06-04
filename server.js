@@ -70,6 +70,7 @@ async function startRound(req, res) {
   try {
     res.send(arduinoConnected);
     generateRandomColour();
+    resetLED();
   } catch (error) {
     handleError(error);
   };
@@ -129,6 +130,10 @@ function generateRandomColour() {
 
 function displayRelevantColour(red, green, blue) {
   led.color({red: red, green: green, blue: blue });
+}
+
+function resetLED() {
+  led.color({red: 0, green: 0, blue: 0});
 }
 
 // light show if the user 'wins' the game
