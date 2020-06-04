@@ -3,6 +3,7 @@
   import { convertToPercentage } from '../Game/calculations';
   import { disablePreview, changeTextForRound5, ledDisplay } from '../Game/display'
   import { gameProgress } from '../Game/store';
+  import { quitGame } from '../Game/progress'
 
   const dispatch = createEventDispatcher();
 
@@ -47,9 +48,7 @@
           if (reconnect) {
             sendSliderValues();
           } else {
-            dispatch('quit', {
-              isPlaying: false,
-            });
+            quitGame();
           };
         };
       } else {
