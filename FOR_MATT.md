@@ -15,7 +15,9 @@ POINTS TO TALK ABOUT WITH MATTHEW JOSIAH EBENEEZER BREALEY
 - I've added a store for the user colours, but it didn't like binding the store values
   to the sliders _at all_ - so I've left the user values in Play.svelte and am just
   currently updating the colours store after each round is complete... can you get
-  the sliders linked to the colour store values I wonder...?
+  the sliders linked to the colour store values I wonder...? This is also part of the
+  reason why the code isn't fully tidied as yet - a few functions require the userRed
+  etc values from Play.svelte component. 
 
 - The placement of the big function within Play.svelte as noted
 
