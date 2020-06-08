@@ -30,36 +30,16 @@
 			bluePercentage: event.detail.bluePerc,
 			buttonText: setButtonTextToFinish($gameProgress.round),
 		};
-		gameProgress.update(progress => {
-			return {
-				...progress,
-				isGuessing: false,
-				guessComplete: true
-			}
-		});
+		gameProgress.finishGuessing();
 	}
 
 	// add results to array & move onto next round (or finish game if at round 5)
 	function startNextRound(event) {
-		const roundResults = $gameProgress.results;
 		// parseFloat turns the array values from a string to a number
-		roundResults.push(parseFloat(event.detail.score));
-	  gameProgress.update(progress => {
-	    return {
-	      ...progress,
-	      results: roundResults
-	    };
-	  });
+	  gameProgress.saveRoundResults(parseFloat(event.detail.score));
 	  if ($gameProgress.round < 5) {
 	    //move onto the next round
-	    gameProgress.update(progress => {
-	      return {
-	        ...progress,
-	        guessComplete: false,
-					hasGuessed: false,
-	        round: $gameProgress.round + 1
-	      }
-	    });
+	    gameProgress.newRound();
 			const serverAddress = 'http://localhost:4000/startRound';
 	    changeArduinoColour(serverAddress);
 	  } else {
@@ -69,12 +49,7 @@
 	}
 
 	function finishGame() {
-	  gameProgress.update(progress => {
-	    return {
-	      ...progress,
-	      gameFinished: true
-	    };
-	  });
+	  gameProgress.endGame();
 	  // get the average value of an array using reduce function
 	  const averageScore = ($gameProgress.results.reduce((a, b) => a + b, 0)) / 5;
 		// compile results in a package to send to GameEnd component

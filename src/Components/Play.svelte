@@ -34,7 +34,7 @@
 
 
     async function sendSliderValues() {
-      if (!$gameProgress.hasGuessed) {
+      if (!$gameProgress.guessComplete) {
         const serverAddress = 'http://localhost:4000/play/';
         //set up the slider values (and current page of the app) as parameters
         const sliderAddress = serverAddress + colourParams;
@@ -68,6 +68,7 @@
 
   //initally set button text as we start in Preview Mode
   let buttonText = 'Guess Mode';
+
   // switch between Preview Mode and Guess Mode
   function switchModes() {
     if ($gameProgress.isGuessing) {
@@ -75,22 +76,11 @@
     } else {
       buttonText = 'Preview Mode';
     };
-    gameProgress.update(progress => {
-      return {
-        ...progress,
-        isGuessing: !$gameProgress.isGuessing
-      };
-    });
+    gameProgress.switchView();
   }
 
   // once submitted, all relevant data to be passed via event dispatcher
   function submitAttempt() {
-    gameProgress.update(progress => {
-      return {
-        ...progress,
-        hasGuessed: true
-      };
-    });
     dispatch('submitted', {
       redVal: userRed,
       redPerc: userRedPercentage,
