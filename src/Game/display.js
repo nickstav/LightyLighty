@@ -1,13 +1,5 @@
 /* ----------------------------App.svelte-----------------------------------*/
 
-export function setButtonTextToFinish(currentRound) {
-  if (currentRound < 5) {
-    return 'Next Round';
-  } else {
-    return 'Finish';
-  };
-}
-
 export function getBackgroundColour(condition) {
   if (condition) {
     return '#565656';
@@ -52,6 +44,16 @@ export function ledDisplay(colour) {
   slider...  https://css-tricks.com/value-bubbles-for-range-inputs */
   const position = (colour + (6 - (colour * 0.15)));
   return position;
+}
+
+/* --------------------------Results.svelte---------------------------------*/
+
+export function setButtonTextToFinish(currentRound) {
+  if (currentRound < 5) {
+    return 'Next Round';
+  } else {
+    return 'Finish';
+  };
 }
 
 /* --------------------------GameEnd.svelte---------------------------------*/

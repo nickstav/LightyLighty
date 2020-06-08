@@ -49,7 +49,7 @@ export async function getResults(address, userRedPerc, userGreenPerc, userBluePe
    greenPerc,
    bluePerc,
    roundScore,
-       };
+  };
 }
 
 /* --------------------------GameEnd.svelte---------------------------------*/

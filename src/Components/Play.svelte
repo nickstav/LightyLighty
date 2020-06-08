@@ -1,11 +1,9 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import { convertToPercentage } from '../Game/calculations';
   import { disablePreview, changeTextForRound5, ledDisplay } from '../Game/display'
-  import { gameProgress } from '../Game/store';
+  import { gameProgress } from '../Game/gameStore';
+  import { userColours, userColoursPerc } from '../Game/colourStore'
   import { quitGame } from '../Game/progress'
-
-  const dispatch = createEventDispatcher();
 
 /* ----------------------------User Colours----------------------------------*/
 
@@ -22,9 +20,6 @@
   $: greenLED = ledDisplay(userGreenPercentage);
   $: blueLED = ledDisplay(userBluePercentage);
 
-  // the api parameters to send the relevant data to the server
-  $: colourParams = `${userRed}/${userGreen}/${userBlue}/${$gameProgress.isGuessing}`;
-
 /* -------------------------send data to Server------------------------------*/
 
   /* NOTE FOR MATT: I decided to leave this function here rather than move it to
@@ -32,6 +27,8 @@
   displayed in the Play.svelte component... not as neat but personally easier to
   follow... so yeah... what be yer thoughts..? */
 
+  // the api parameters to send the relevant data to the server
+  $: colourParams = `${userRed}/${userGreen}/${userBlue}/${$gameProgress.isGuessing}`;
 
     async function sendSliderValues() {
       if (!$gameProgress.guessComplete) {
@@ -79,16 +76,10 @@
     gameProgress.switchView();
   }
 
-  // once submitted, all relevant data to be passed via event dispatcher
+  // once submitted, save the user values and end the round
   function submitAttempt() {
-    dispatch('submitted', {
-      redVal: userRed,
-      redPerc: userRedPercentage,
-      greenVal: userGreen,
-      greenPerc: userGreenPercentage,
-      blueVal: userBlue,
-      bluePerc: userBluePercentage,
-    });
+    userColours.updateValues(userRed, userGreen, userBlue);
+    gameProgress.finishGuessing();
   }
 
 </script>

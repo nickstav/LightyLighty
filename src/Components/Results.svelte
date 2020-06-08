@@ -1,28 +1,38 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
-  import { getResults } from '../Game/fetch'
-  import { gameProgress } from '../Game/store'
-
-  export let redValue, greenValue, blueValue;
-  export let redPercentage, greenPercentage, bluePercentage;
-  export let buttonText;
-
-  const dispatch = createEventDispatcher();
+  import { getResults, changeArduinoColour } from '../Game/fetch'
+  import { gameProgress } from '../Game/gameStore'
+  import { userColours, userColoursPerc } from '../Game/colourStore'
+  import { setButtonTextToFinish } from '../Game/display'
 
 /* --------------------------Get the results---------------------------------*/
 
   const serverAddress = 'http://localhost:4000/results/';
-  let arduinoInfo = getResults(serverAddress, redPercentage, greenPercentage, bluePercentage);
+  let arduinoInfo = getResults(serverAddress, $userColoursPerc.red, $userColoursPerc.green, $userColoursPerc.blue);
 
 /* ------------------------Event handling------------------------------------*/
 
-  async function newRound(){
+  async function updateScore() {
     const resultsFromServer = await arduinoInfo;
     const score = resultsFromServer.roundScore;
-    dispatch('nextRound', {
-      score: score,
-    });
+    // parseFloat turns the array values from a string to a number
+    gameProgress.saveRoundResults(parseFloat(score));
   }
+
+  async function newRound(currentRound) {
+    updateScore();
+    userColours.resetValues();
+    if (currentRound < 5) {
+      //move onto the next round
+      gameProgress.newRound();
+      const serverAddress = 'http://localhost:4000/startRound';
+      changeArduinoColour(serverAddress);
+    } else {
+      //game is finished and call the finishGame function below
+      gameProgress.endGame();
+    };
+  }
+
+  $: buttonText = setButtonTextToFinish($gameProgress.round);
 
 /* --------------------------------------------------------------------------*/
 
@@ -118,17 +128,17 @@
     </div>
     <div id="user">
       <h3>User</h3>
-      <div class="boxUser" style="background-color: rgb({redValue}, {greenValue}, {blueValue})"/>
+      <div class="boxUser" style="background-color: rgb({$userColours.red}, {$userColours.green}, {$userColours.blue})"/>
       <div id="userResults">
-        <p>{redPercentage}% red</p>
-        <p>{greenPercentage}% green</p>
-        <p>{bluePercentage}% blue</p>
+        <p>{$userColoursPerc.red}% red</p>
+        <p>{$userColoursPerc.green}% green</p>
+        <p>{$userColoursPerc.blue}% blue</p>
       </div>
     </div>
   </div>
   <div id="summary&button">
     <p class="summaryParagraph">You got within {item.roundScore}% of the Arduino colour!</p>
-    <button on:click={newRound}>{buttonText}</button>
+    <button on:click={()=>newRound($gameProgress.round)}>{buttonText}</button>
   </div>
 {:catch error}
   <p class="error" style="color: red">{error.message}</p>

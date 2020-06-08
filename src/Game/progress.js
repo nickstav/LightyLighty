@@ -1,4 +1,5 @@
-import { gameProgress } from './store';
+import { gameProgress } from './gameStore';
+import { userColours } from './colourStore';
 import { checkConnection } from './fetch'
 
 

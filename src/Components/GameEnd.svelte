@@ -1,6 +1,5 @@
 <script>
-
-  import { gameProgress } from '../Game/store'
+  import { gameProgress } from '../Game/gameStore'
   import { resultToServer } from '../Game/fetch';
   import { getHeader, getParagraph } from '../Game/display'
   import { quitGame } from '../Game/progress'
@@ -8,12 +7,14 @@
   // define required % accuracy to win the game
   const requiredScore = 15;
 
-  export let oneScore, twoScore, threeScore, fourScore, fiveScore, finalScore;
+  // get the average value of an array using reduce function
+  let averageScore = ($gameProgress.results.reduce((a, b) => a + b, 0)) / 5;
+  let finalScore = averageScore.toFixed(2);
 
 /* ---------Send results to the server for light show-------------------------*/
 
-const serverAddress = 'http://localhost:4000/enlightylightenment/';
-resultToServer(serverAddress, finalScore);
+  const serverAddress = 'http://localhost:4000/enlightylightenment/';
+  resultToServer(serverAddress, finalScore);
 
 /* ------------- --Display the results on the page----------------------------*/
 
@@ -77,23 +78,23 @@ resultToServer(serverAddress, finalScore);
     </tr>
     <tr>
       <td>1</td>
-      <td>{oneScore}%</td>
+      <td>{$gameProgress.results[0]}%</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>{twoScore}%</td>
+      <td>{$gameProgress.results[1]}%</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>{threeScore}%</td>
+      <td>{$gameProgress.results[2]}%</td>
     </tr>
     <tr>
       <td>4</td>
-      <td>{fourScore}%</td>
+      <td>{$gameProgress.results[3]}%</td>
     </tr>
     <tr>
       <td>5</td>
-      <td>{fiveScore}%</td>
+      <td>{$gameProgress.results[4]}%</td>
     </tr>
     <tr>
       <td>Overall</td>
