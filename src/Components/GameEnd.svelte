@@ -3,13 +3,12 @@
   import { resultToServer } from '../Game/fetch';
   import { getHeader, getParagraph } from '../Game/display'
   import { quitGame } from '../Game/progress'
+  import { calculateFinalScore } from '../Game/calculations'
 
   // define required % accuracy to win the game
   const requiredScore = 15;
 
-  // get the average value of an array using reduce function
-  let averageScore = ($gameProgress.results.reduce((a, b) => a + b, 0)) / 5;
-  let finalScore = averageScore.toFixed(2);
+  const finalScore = calculateFinalScore($gameProgress.results);
 
 /* ---------Send results to the server for light show-------------------------*/
 

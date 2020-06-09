@@ -1,8 +1,6 @@
 <script>
-
   import { gameProgress } from '../Game/gameStore'
   import { startGame, quitGame } from '../Game/progress'
-
 </script>
 
 <style>

@@ -1,40 +1,13 @@
 <script>
-  import { getResults, changeArduinoColour } from '../Game/fetch'
+
+  import { getResults } from '../Game/fetch'
   import { gameProgress } from '../Game/gameStore'
   import { userColours, userColoursPerc } from '../Game/colourStore'
   import { setButtonTextToFinish } from '../Game/display'
+  import { newRound } from '../Game/progress'
 
-/* --------------------------Get the results---------------------------------*/
-
-  const serverAddress = 'http://localhost:4000/results/';
-  let arduinoInfo = getResults(serverAddress, $userColoursPerc.red, $userColoursPerc.green, $userColoursPerc.blue);
-
-/* ------------------------Event handling------------------------------------*/
-
-  async function updateScore() {
-    const resultsFromServer = await arduinoInfo;
-    const score = resultsFromServer.roundScore;
-    // parseFloat turns the array values from a string to a number
-    gameProgress.saveRoundResults(parseFloat(score));
-  }
-
-  async function newRound(currentRound) {
-    updateScore();
-    userColours.resetValues();
-    if (currentRound < 5) {
-      //move onto the next round
-      gameProgress.newRound();
-      const serverAddress = 'http://localhost:4000/startRound';
-      changeArduinoColour(serverAddress);
-    } else {
-      //game is finished and call the finishGame function below
-      gameProgress.endGame();
-    };
-  }
-
+  $: arduinoInfo = getResults($userColoursPerc.red, $userColoursPerc.green, $userColoursPerc.blue);
   $: buttonText = setButtonTextToFinish($gameProgress.round);
-
-/* --------------------------------------------------------------------------*/
 
 </script>
 
@@ -138,7 +111,7 @@
   </div>
   <div id="summary&button">
     <p class="summaryParagraph">You got within {item.roundScore}% of the Arduino colour!</p>
-    <button on:click={()=>newRound($gameProgress.round)}>{buttonText}</button>
+    <button on:click={()=>newRound($gameProgress.round, arduinoInfo)}>{buttonText}</button>
   </div>
 {:catch error}
   <p class="error" style="color: red">{error.message}</p>

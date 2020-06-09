@@ -3,7 +3,7 @@
   import { disablePreview, changeTextForRound5, ledDisplay } from '../Game/display'
   import { gameProgress } from '../Game/gameStore';
   import { userColours, userColoursPerc } from '../Game/colourStore'
-  import { quitGame } from '../Game/progress'
+  import { quitGame, submitAttempt } from '../Game/progress'
 
 /* ----------------------------User Colours----------------------------------*/
 
@@ -19,6 +19,26 @@
   $: redLED = ledDisplay(userRedPercentage);
   $: greenLED = ledDisplay(userGreenPercentage);
   $: blueLED = ledDisplay(userBluePercentage);
+
+/* --------------------------Handle Round 5----------------------------------*/
+
+  $: checkRound5 = disablePreview($gameProgress.round, $gameProgress.isGuessing);
+  $: secondParagraph = changeTextForRound5($gameProgress.round);
+
+  /* ------------------------Switch Modes------------------------------------*/
+  
+    //initally set button text as we start in Preview Mode
+    let buttonText = 'Guess Mode';
+
+    // switch between Preview Mode and Guess Mode
+    function switchModes() {
+      if ($gameProgress.isGuessing) {
+        buttonText =  'Guess Mode';
+      } else {
+        buttonText = 'Preview Mode';
+      };
+      gameProgress.switchView();
+    }
 
 /* -------------------------send data to Server------------------------------*/
 
@@ -56,31 +76,6 @@
 
   // call the above function every 500ms
   let updateServer = setInterval(sendSliderValues, 500);
-
-/* ------------------------Event handling------------------------------------*/
-
-  $: checkRound5 = disablePreview($gameProgress.round, $gameProgress.isGuessing);
-
-  $: secondParagraph = changeTextForRound5($gameProgress.round);
-
-  //initally set button text as we start in Preview Mode
-  let buttonText = 'Guess Mode';
-
-  // switch between Preview Mode and Guess Mode
-  function switchModes() {
-    if ($gameProgress.isGuessing) {
-      buttonText =  'Guess Mode';
-    } else {
-      buttonText = 'Preview Mode';
-    };
-    gameProgress.switchView();
-  }
-
-  // once submitted, save the user values and end the round
-  function submitAttempt() {
-    userColours.updateValues(userRed, userGreen, userBlue);
-    gameProgress.finishGuessing();
-  }
 
 </script>
 
@@ -268,6 +263,6 @@
   </div>
 {/if}
 <div id="buttons">
-  <button disabled={checkRound5} class="preview" on:click={switchModes(buttonText)}>{buttonText}</button>
-  <button disabled={!$gameProgress.isGuessing} class="submit" on:click={submitAttempt}>Check</button>
+  <button disabled={checkRound5} class="preview" on:click={switchModes}>{buttonText}</button>
+  <button disabled={!$gameProgress.isGuessing} class="submit" on:click={()=>submitAttempt(userRed, userGreen, userBlue)}>Check</button>
 </div>

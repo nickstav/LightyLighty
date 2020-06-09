@@ -9,3 +9,10 @@ export function getAccuracy(red1, red2, green1, green2, blue1, blue2) {
 export function convertToPercentage(colour) {
   return Math.round((colour/255)*100);
 }
+
+export function calculateFinalScore(array) {
+  // get the average value of an array using reduce function
+  let averageScore = (array.reduce((a, b) => a + b, 0)) / array.length;
+  let finalScore = averageScore.toFixed(2);
+  return finalScore;
+}

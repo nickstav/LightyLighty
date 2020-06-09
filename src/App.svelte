@@ -8,8 +8,6 @@
 	import { gameProgress } from './Game/gameStore'
 	import { getBackgroundColour } from './Game/display'
 
-/* --------------------------Set Background---------------------------------*/
-
 	// random neon colour for the splash page or grey fade for rest of the app
 	$: backgroundColour = getBackgroundColour($gameProgress.isReady);
 

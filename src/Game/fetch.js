@@ -1,4 +1,5 @@
   import { convertToPercentage, getAccuracy } from './calculations.js';
+  import { gameProgress } from './gameStore.js';
 
 /* ----------------------------App.svelte-----------------------------------*/
 
@@ -35,8 +36,9 @@ async function getArduinoColour(address) {
  };
 }
 
-export async function getResults(address, userRedPerc, userGreenPerc, userBluePerc) {
-  const arduinoColour = await getArduinoColour(address);
+export async function getResults(userRedPerc, userGreenPerc, userBluePerc) {
+  const serverAddress = 'http://localhost:4000/results/';
+  const arduinoColour = await getArduinoColour(serverAddress);
   const redPerc = convertToPercentage(arduinoColour.arduinoRed);
   const greenPerc = convertToPercentage(arduinoColour.arduinoGreen);
   const bluePerc = convertToPercentage(arduinoColour.arduinoBlue);
@@ -50,6 +52,13 @@ export async function getResults(address, userRedPerc, userGreenPerc, userBluePe
    bluePerc,
    roundScore,
   };
+}
+
+export async function updateScore(serverInfo) {
+  const resultsFromServer = await serverInfo;
+  const score = resultsFromServer.roundScore;
+  // parseFloat turns the array values from a string to a number
+  gameProgress.saveRoundResults(parseFloat(score));
 }
 
 /* --------------------------GameEnd.svelte---------------------------------*/
